@@ -64,6 +64,8 @@ abstract class ItemControllerAbstract extends Controller
         return $this->render('index', [
             'filterModel'  => $filterModel,
             'dataProvider' => $filterModel->search(\Yii::$app->request->get()),
+            'children' => $filterModel->children(),
+            'permissions' => $filterModel->permissions(),
         ]);
     }
 

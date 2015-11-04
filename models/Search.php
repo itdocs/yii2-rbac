@@ -73,4 +73,42 @@ class Search extends Model
         
         return $dataProvider;
     }
+
+    public function children()
+    {
+        $query = (new Query)->select(['name', 'description', 'rule_name'])
+            ->andWhere(['type' => $this->type])
+            ->from($this->manager->itemTable);
+
+        $arr = $query->all($this->manager->db);
+
+        foreach ($arr as $k=>$v) {
+            $children = (new Query())->select(['child','description'])
+                ->from('auth_item_child')
+                ->leftJoin('auth_item','child = name')
+                ->where(['parent' => $v['name']])
+                ->all();
+            $new = [];
+            $new_desc = [];
+            foreach($children as $ch){
+                array_push($new, $ch['child']);
+                array_push($new_desc, $ch['description']);
+            }
+            $arr[$k]['child'] = $new;
+            $arr[$k]['child_desc'] = $new_desc;
+        }
+//        print_r($arr);exit;
+        return $arr;
+    }
+
+    public function permissions()
+    {
+        $query = (new Query)->select(['name','description'])
+            ->andWhere(['type' => 2])
+            ->from('auth_item');
+
+        $arr = $query->all();
+//        print_r($arr);exit;
+        return $arr;
+    }
 }

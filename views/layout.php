@@ -12,9 +12,11 @@
 /**
  * @var $this  yii\web\View
  */
-
+Yii::$app->session->set('current_nav', 'rbac');
 ?>
-
+<style>
+    #w4-success{width:300px;margin: 0 auto;}
+</style>
 <?= $this->render('/_alert', [
     'module' => Yii::$app->getModule('rbac'),
 ]) ?>
